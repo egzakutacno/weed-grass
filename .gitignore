@@ -1,0 +1,29 @@
+# Environment variables
+.env
+config/.env
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Logs
+logs/*.log
+
+# Images (optional - you might want to keep these)
+# images/
+
+# Meme packages (optional - you might want to keep these)
+# meme_packages/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
