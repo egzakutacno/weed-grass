@@ -1,0 +1,23 @@
+MEME TOKEN DESCRIPTION
+==================================================
+
+Post Details:
+- Title: A car-free stretch of highway in San Francisco leads to recall vote and warning to politicians
+- Subreddit: r/news
+- Post ID: 1nj0pee
+- URL: https://reddit.com/r/news/comments/1nj0pee/a_carfree_stretch_of_highway_in_san_francisco/
+- Score: 536
+- Comments: 69
+- Created: 2025-09-17 10:05:07
+- Detected: 2025-09-17 21:10:12
+
+Meme Description:
+San Francisco's car-free highway causes chaos and politicians are in trouble - what a surprise.
+
+Image Information:
+- Original URL: No image
+- Local Path: No image downloaded
+
+Token Metadata Ready: ✅
+Generated: 2025-09-17 21:10:12
+==================================================

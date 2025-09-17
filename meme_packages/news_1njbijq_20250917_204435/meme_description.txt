@@ -1,0 +1,23 @@
+MEME TOKEN DESCRIPTION
+==================================================
+
+Post Details:
+- Title: US is not the partner that engaged in good cooperation with allies it once was, Korea’s top diplomat says
+- Subreddit: r/news
+- Post ID: 1njbijq
+- URL: https://reddit.com/r/news/comments/1njbijq/us_is_not_the_partner_that_engaged_in_good/
+- Score: 685
+- Comments: 48
+- Created: 2025-09-17 20:16:56
+- Detected: 2025-09-17 20:44:35
+
+Meme Description:
+Ah, yes, because nothing screams "productive partnership" like a top diplomat publicly announcing that the US is basically the friend who used to bring snacks to the party but now just shows up empty-handed. Maybe they should start a diplomacy book club to work out their issues.
+
+Image Information:
+- Original URL: No image
+- Local Path: No image downloaded
+
+Token Metadata Ready: ✅
+Generated: 2025-09-17 20:44:35
+==================================================

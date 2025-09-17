@@ -1,0 +1,17 @@
+{
+  "post_id": "test123",
+  "title": "Test Post: Something that would definitely go viral",
+  "subreddit": "test",
+  "url": "https://reddit.com/r/test/comments/test123/",
+  "score": 1500,
+  "comments": 45,
+  "created_utc": 1758112980.24052,
+  "created_human": "2025-09-17 20:43:00",
+  "image_url": "https://example.com/test_image.jpg",
+  "image_local_path": "images/test_123_1234567890.jpg",
+  "meme_description": "This is a test description that would definitely make people laugh and share it everywhere.",
+  "upvote_rate": 25.5,
+  "comment_rate": 8.2,
+  "detected_at": "2025-09-17T20:43:03.398512",
+  "package_created": "2025-09-17T20:43:03.398517"
+}

@@ -1,0 +1,23 @@
+MEME TOKEN DESCRIPTION
+==================================================
+
+Post Details:
+- Title: Ben & Jerry’s co-founder Greenfield steps down
+- Subreddit: r/news
+- Post ID: 1nj4mtn
+- URL: https://reddit.com/r/news/comments/1nj4mtn/ben_jerrys_cofounder_greenfield_steps_down/
+- Score: 287
+- Comments: 69
+- Created: 2025-09-17 13:28:11
+- Detected: 2025-09-17 21:10:12
+
+Meme Description:
+Ben & Jerry's co-founder finally says, "Peace out!"
+
+Image Information:
+- Original URL: No image
+- Local Path: No image downloaded
+
+Token Metadata Ready: ✅
+Generated: 2025-09-17 21:10:12
+==================================================
