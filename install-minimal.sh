@@ -1,26 +1,16 @@
 #!/bin/bash
-# One-liner installation script for Reddit Meme Material Radar on Ubuntu VPS
-# Usage: curl -sSL https://raw.githubusercontent.com/egzakutacno/weed-grass/master/install.sh | bash
+# Minimal installation script for Reddit Meme Material Radar on Ubuntu VPS
+# This version skips system upgrades to avoid interactive prompts
+# Usage: curl -sSL https://raw.githubusercontent.com/egzakutacno/weed-grass/master/install-minimal.sh | bash
 
 set -e  # Exit on any error
 
-echo "🚀 Installing Reddit Meme Material Radar..."
+echo "🚀 Installing Reddit Meme Material Radar (minimal setup)..."
 
-# Update system packages
-echo "📦 Updating system packages..."
-export DEBIAN_FRONTEND=noninteractive
-sudo apt update && sudo apt upgrade -y
-
-# Install Python 3 and pip if not already installed
-echo "🐍 Installing Python 3 and pip..."
-sudo apt install -y python3 python3-pip python3-venv git
-
-# Install system dependencies for image processing
-echo "🖼️ Installing image processing dependencies..."
-sudo apt install -y libjpeg-dev zlib1g-dev libpng-dev libfreetype6-dev
-
-# Reset interactive mode
-unset DEBIAN_FRONTEND
+# Install required packages without upgrading system
+echo "📦 Installing required packages..."
+sudo apt update
+sudo apt install -y python3 python3-pip python3-venv git libjpeg-dev zlib1g-dev libpng-dev libfreetype6-dev
 
 # Clone the repository
 echo "📥 Cloning repository..."
