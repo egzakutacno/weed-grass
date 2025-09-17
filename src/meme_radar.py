@@ -130,7 +130,7 @@ class RedditMonitor:
         if SUMMARIZATION['enabled']:
             openai_api_key = os.getenv('OPENAI_API_KEY')
             if openai_api_key:
-                openai.api_key = openai_api_key
+                self.openai_client = openai.OpenAI(api_key=openai_api_key)
                 self.logger.info("OpenAI API configured for summarization")
             else:
                 self.logger.warning("OpenAI API key not found. Summarization will be disabled.")
@@ -549,7 +549,7 @@ class RedditMonitor:
             content += f"Upvote Rate: {post_data.upvote_rate:.1f} upvotes/min"
             
             # Generate witty description using OpenAI
-            response = openai.chat.completions.create(
+            response = self.openai_client.chat.completions.create(
                 model=SUMMARIZATION['model'],
                 messages=[
                     {"role": "system", "content": "Generate a very short, punchy, human-style description of the Reddit post. Keep it one line, like something a fed-up, smart, smug person would mutter while scrolling Reddit. Don't add extra narrative or jokes unless they naturally fit in one line. Small grammar mistakes are okay, as long as it still reads like a real human. Basically, just capture the essence or absurdity of the post in one short sentence. No emojis, and minimum usage of punctuation. Almost non-existent punctuation. Example: 'ah the sweet smell of bankruptcy ruining people's dreams'"},
