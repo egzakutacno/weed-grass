@@ -367,8 +367,9 @@ class RedditMonitor:
         self.logger.info(f"Starting monitoring for r/{subreddit_name} - tracking RISING posts only (not already hot)")
         
         # Wait 30 seconds before starting to process posts (let the bot settle)
-        self.logger.info(f"Waiting 30 seconds before starting to track posts...")
+        self.logger.info(f"⏳ Waiting 30 seconds before starting to track posts...")
         time.sleep(30)
+        self.logger.info(f"🚀 r/{subreddit_name} monitoring is now ACTIVE - looking for rising posts!")
         
         while self.running:
             try:
@@ -376,29 +377,43 @@ class RedditMonitor:
                 subreddit = self.reddit.subreddit(subreddit_name)
                 
                 # Get rising posts only (not already hot posts)
+                self.logger.info(f"🔍 Checking r/{subreddit_name} for rising posts...")
                 posts = subreddit.rising(limit=10)
+                
+                posts_checked = 0
+                posts_processed = 0
+                posts_skipped = 0
                 
                 for post in posts:
                     if not self.running:
                         break
                     
+                    posts_checked += 1
+                    
                     # Only process posts that are actually rising (not already established hot posts)
                     # Skip posts that are too old or already very popular
                     post_age = datetime.now() - datetime.fromtimestamp(post.created_utc)
                     if post_age > timedelta(hours=2):  # Skip posts older than 2 hours
+                        posts_skipped += 1
                         continue
                     if post.score > 1000:  # Skip posts that are already very popular
+                        posts_skipped += 1
                         continue
                         
                     post_data = self.process_post(post, subreddit_config)
                     if post_data:
                         post_key = self.get_post_key(subreddit_name, post.id)
                         self.tracked_posts[post_key] = post_data
+                        posts_processed += 1
+                
+                # Log status summary
+                self.logger.info(f"📊 r/{subreddit_name} check complete: {posts_checked} posts checked, {posts_processed} processed, {posts_skipped} skipped")
                         
                 # Clean up old posts
                 self.cleanup_old_posts(subreddit_name)
                 
                 # Wait for next poll
+                self.logger.info(f"⏰ Waiting {subreddit_config['poll_interval']} seconds before next check...")
                 time.sleep(subreddit_config['poll_interval'])
                 
             except Exception as e:
