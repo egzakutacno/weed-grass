@@ -301,6 +301,7 @@ class RedditMonitor:
             if SUMMARIZATION['enabled']:
                 summary = self.generate_summary(post_data)
                 post_data.summary = summary
+                self.logger.info(f"Summary for post {post_data.id}: {summary}")
             
             # Create post package for every post with image (regardless of threshold)
             if post_data.image_path:
