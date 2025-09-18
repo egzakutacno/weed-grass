@@ -302,6 +302,10 @@ class RedditMonitor:
                 summary = self.generate_summary(post_data)
                 post_data.summary = summary
             
+            # Create post package for every post with image (regardless of threshold)
+            if post_data.image_path:
+                self.create_post_package(post_data)
+            
             # Check initial threshold to decide if we should start tracking
             if len(post_data.snapshots) >= 2:
                 initial_rate = self.calculate_upvote_rate_from_snapshots(post_data)
@@ -532,6 +536,151 @@ class RedditMonitor:
                 
         except Exception as e:
             self.logger.error(f"Failed to download image {image_url}: {e}")
+            return None
+    
+    def create_human_readable_folder_name(self, title: str, post_id: str) -> str:
+        """Create a human-readable folder name from post title."""
+        # Clean the title
+        clean_title = title.lower()
+        # Remove special characters and replace spaces with hyphens
+        clean_title = ''.join(c if c.isalnum() or c.isspace() else ' ' for c in clean_title)
+        # Replace multiple spaces with single space, then replace spaces with hyphens
+        clean_title = '-'.join(clean_title.split())
+        # Limit length and add post ID
+        if len(clean_title) > 50:
+            clean_title = clean_title[:50]
+        # Add post ID to ensure uniqueness
+        return f"{clean_title}-{post_id}"
+    
+    def create_post_package(self, post_data: PostData) -> Optional[str]:
+        """Create a complete package for every post with image, regardless of threshold."""
+        if not post_data.image_path or not os.path.exists(post_data.image_path):
+            return None
+            
+        try:
+            # Create packages directory
+            packages_folder = MEME_PACKAGES['packages_folder']
+            packages_dir = Path(packages_folder)
+            packages_dir.mkdir(exist_ok=True)
+            
+            # Create human-readable folder name
+            folder_name = self.create_human_readable_folder_name(post_data.title, post_data.id)
+            meme_dir = packages_dir / folder_name
+            
+            # Check if folder already exists (avoid duplicates)
+            if meme_dir.exists():
+                self.logger.debug(f"Package already exists for post {post_data.id}, skipping")
+                return str(meme_dir)
+            
+            meme_dir.mkdir(exist_ok=True)
+            
+            # 1. Copy image to package
+            image_filename = Path(post_data.image_path).name
+            meme_image_path = meme_dir / image_filename
+            shutil.copy2(post_data.image_path, meme_image_path)
+            
+            # 2. Save main meme description
+            description_file = meme_dir / "meme_description.txt"
+            with open(description_file, 'w', encoding='utf-8') as f:
+                f.write(f"""MEME TOKEN DESCRIPTION
+{'='*50}
+
+Post Details:
+- Title: {post_data.title}
+- Subreddit: r/{post_data.subreddit}
+- Post ID: {post_data.id}
+- URL: {post_data.url}
+- Score: {post_data.score}
+- Comments: {post_data.comment_count}
+- Created: {datetime.fromtimestamp(post_data.created_utc).strftime('%Y-%m-%d %H:%M:%S')}
+- Processed: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+
+Meme Description:
+{post_data.summary or 'No description generated'}
+
+Image Information:
+- Original URL: {post_data.image_url or 'No image'}
+- Local Path: {post_data.image_path or 'No image downloaded'}
+
+Token Metadata Ready: ✅
+Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+{'='*50}
+""")
+            
+            # 3. Save detailed metadata JSON
+            metadata = {
+                "post_id": post_data.id,
+                "title": post_data.title,
+                "subreddit": post_data.subreddit,
+                "url": post_data.url,
+                "score": post_data.score,
+                "comments": post_data.comment_count,
+                "created_utc": post_data.created_utc,
+                "created_human": datetime.fromtimestamp(post_data.created_utc).strftime('%Y-%m-%d %H:%M:%S'),
+                "image_url": post_data.image_url,
+                "image_local_path": str(meme_image_path),
+                "meme_description": post_data.summary,
+                "upvote_rate": post_data.upvote_rate,
+                "comment_rate": post_data.comment_rate,
+                "processed_at": datetime.now().isoformat(),
+                "package_created": datetime.now().isoformat(),
+                "folder_name": folder_name
+            }
+            
+            metadata_file = meme_dir / "metadata.json"
+            with open(metadata_file, 'w', encoding='utf-8') as f:
+                json.dump(metadata, f, indent=2, ensure_ascii=False)
+            
+            # 4. Save URLs list
+            urls_file = meme_dir / "urls.txt"
+            with open(urls_file, 'w', encoding='utf-8') as f:
+                f.write(f"""REDDIT POST URLS
+{'='*30}
+Reddit Post: {post_data.url}
+Original Image: {post_data.image_url or 'No image'}
+Local Image: {str(meme_image_path)}
+
+Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+""")
+            
+            # 5. Create README for the package
+            readme_file = meme_dir / "README.md"
+            with open(readme_file, 'w', encoding='utf-8') as f:
+                f.write(f"""# Meme Package: {post_data.title[:50]}...
+
+## Files in this package:
+- `meme_description.txt` - Main meme description for token metadata
+- `metadata.json` - Complete post metadata in JSON format
+- `urls.txt` - All relevant URLs
+- `README.md` - This file
+- `{image_filename}` - Downloaded image
+
+## Meme Description:
+{post_data.summary or 'No description generated'}
+
+## Quick Stats:
+- **Subreddit**: r/{post_data.subreddit}
+- **Score**: {post_data.score}
+- **Comments**: {post_data.comment_count}
+- **Upvote Rate**: {post_data.upvote_rate:.1f} upvotes/min
+- **Comment Rate**: {post_data.comment_rate:.1f} comments/min
+- **Created**: {datetime.fromtimestamp(post_data.created_utc).strftime('%Y-%m-%d %H:%M:%S')}
+
+## For Meme Token App:
+This package contains everything needed to generate a meme token:
+- Image file ready for processing
+- AI-generated description
+- Complete metadata in JSON format
+- All relevant URLs
+
+Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+""")
+            
+            self.logger.info(f"Created post package: {meme_dir}")
+            return str(meme_dir)
+            
+        except Exception as e:
+            self.logger.error(f"Failed to create post package for {post_data.id}: {e}")
             return None
             
     def generate_summary(self, post_data: PostData) -> Optional[str]:
