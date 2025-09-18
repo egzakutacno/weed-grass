@@ -366,6 +366,10 @@ class RedditMonitor:
         subreddit_name = subreddit_config['name']
         self.logger.info(f"Starting monitoring for r/{subreddit_name} - tracking RISING posts only (not already hot)")
         
+        # Wait 30 seconds before starting to process posts (let the bot settle)
+        self.logger.info(f"Waiting 30 seconds before starting to track posts...")
+        time.sleep(30)
+        
         while self.running:
             try:
                 # Get the subreddit
@@ -377,8 +381,15 @@ class RedditMonitor:
                 for post in posts:
                     if not self.running:
                         break
-                        
+                    
                     # Only process posts that are actually rising (not already established hot posts)
+                    # Skip posts that are too old or already very popular
+                    post_age = datetime.now() - datetime.fromtimestamp(post.created_utc)
+                    if post_age > timedelta(hours=2):  # Skip posts older than 2 hours
+                        continue
+                    if post.score > 1000:  # Skip posts that are already very popular
+                        continue
+                        
                     post_data = self.process_post(post, subreddit_config)
                     if post_data:
                         post_key = self.get_post_key(subreddit_name, post.id)
