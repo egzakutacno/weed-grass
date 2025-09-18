@@ -67,6 +67,6 @@ MEME_PACKAGES = {
 SUMMARIZATION = {
     'enabled': True,  # Whether to generate summaries
     'model': 'gpt-3.5-turbo',  # OpenAI model to use
-    'max_tokens': 100,  # Maximum tokens for witty descriptions
+    'max_tokens': 150,  # Maximum tokens for witty descriptions (2-3 sentences)
     'temperature': 0.8  # Higher creativity for sarcastic, witty content
 }
