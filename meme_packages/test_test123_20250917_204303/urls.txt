@@ -1,7 +1,0 @@
-REDDIT POST URLS
-==============================
-Reddit Post: https://reddit.com/r/test/comments/test123/
-Original Image: https://example.com/test_image.jpg
-Local Image: images/test_123_1234567890.jpg
-
-Generated: 2025-09-17 20:43:03

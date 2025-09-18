@@ -12,11 +12,11 @@ __pycache__/
 # Logs
 logs/*.log
 
-# Images (optional - you might want to keep these)
-# images/
-
-# Meme packages (optional - you might want to keep these)
-# meme_packages/
+# Runtime data (exclude from git)
+images/
+meme_packages/
+summaries/
+venv/
 
 # IDE
 .vscode/

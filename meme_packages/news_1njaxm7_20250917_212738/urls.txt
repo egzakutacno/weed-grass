@@ -1,7 +1,0 @@
-REDDIT POST URLS
-==============================
-Reddit Post: https://reddit.com/r/news/comments/1njaxm7/state_department_is_denying_visas_to_those_who/
-Original Image: https://external-preview.redd.it/yUIq9YSP_s2XY5pBbHIVGdyhkkED_t-l-lWCx8-7LkA.jpeg?auto=webp&s=01256b9064035b5b53b97efd162849d1a5fcd05b
-Local Image: images\news_1njaxm7_1758115422.jpeg
-
-Generated: 2025-09-17 21:27:38
